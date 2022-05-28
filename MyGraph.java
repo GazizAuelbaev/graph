@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 public class MyGraph<Vertex> {
     private final boolean undirected;
     private Map<Vertex, List<Vertex>> map = new HashMap<>();
@@ -35,34 +34,57 @@ public class MyGraph<Vertex> {
     }
 
     public int getVerticesCount() {
-        return map.size();
+        return map.keySet().size();
     }
 
     public int getEdgesCount() {
-        int count = 0;
-        for (Vertex v : map.keySet()) {
-            count += map.get(v).size();
+        var temp = 0;
+        for(Vertex v: map.keySet()) {
+            temp+= map.get(v).size();
         }
-
-        if (undirected)
-            count /= 2;
-
-        return count;
+        return temp/2;
     }
 
-
     public boolean hasVertex(Vertex v) {
-        return map.containsKey(v);
+        if (!map.containsKey(v)) {
+            return false;
+        } else return true;
     }
 
     public boolean hasEdge(Vertex source, Vertex dest) {
-        if (!hasVertex(source)) return false;
-        return map.get(source).contains(dest);
+        if(!hasVertex(source)) {
+            return false;
+        }
+        if(!map.get(source).contains(dest)) {
+            return false;
+        }
+        return  true;
     }
 
-    public Iterable<Vertex> adjacencyList(Vertex v) {
-        if (!hasVertex(v)) return null;
+    public MyGraph<Vertex> adj() {
+        for (Vertex v : map.keySet()) {
+            System.out.println("Vertex: " + v + " ");
+            System.out.println("Edge(s): " + map.get(v) + " ");
+        }
+        return null;
+    }
+    public MyGraph<Vertex> adj(Vertex v) {
+        if(map.containsKey(v)) {
+            System.out.println("Vertex: " + v);
+            System.out.println("Edge(s): " + map.get(v));
+        } else {
+            System.out.println("Empty bitch! Have not " + v + " in this Graph.");
+        }
+        return null;
+    }
 
-        return map.get(v);
+    public void removeVertex(Vertex v) {
+        for (Vertex vertex : map.keySet()) {
+            if(map.get(vertex).contains(v)) {
+                List<Vertex> temp =  map.get(vertex);
+                temp.remove(v);
+            }
+        }
+        map.remove(v);
     }
 }
